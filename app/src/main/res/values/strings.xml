@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BBC News</string>
+    <string name="author">Author:</string>
+    <string name="title">Title</string>
+    <string name="published_at">Published at:</string>
+    <string name="url">URL:</string>
+</resources>
