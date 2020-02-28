@@ -19,19 +19,27 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class ArticleDetailFragment extends Fragment {
     Context context;
     ArrayList<Article> articlesList;
-    ViewPager viewPager;
+    //ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
     int selectedPosition = 0;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
+    Unbinder unbinder;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_article_detail, container, false);
+        ButterKnife.bind(this, view);
 
-        viewPager = view.findViewById(R.id.view_pager);
+        //viewPager = view.findViewById(R.id.view_pager);
 
         articlesList = (ArrayList<Article>) getArguments().getSerializable("articlesList");
         selectedPosition = getArguments().getInt("position");
@@ -43,6 +51,7 @@ public class ArticleDetailFragment extends Fragment {
         setCurrentItem(selectedPosition);
 
 
+        unbinder = ButterKnife.bind(this, view);
         return view;
     }
 
@@ -74,9 +83,28 @@ public class ArticleDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
     public class ViewPagerAdapter extends PagerAdapter {
 
         LayoutInflater layoutInflater;
+
+        @BindView(R.id.image_preview)
+        ImageView imageViewDetail;
+        @BindView(R.id.title_preview)
+        TextView titleDetail;
+        @BindView(R.id.description_preview)
+        TextView descriptionDetail;
+        @BindView(R.id.author_preview)
+        TextView authorDetail;
+        @BindView(R.id.published_at_preview)
+        TextView publishedAtDetail;
+        @BindView(R.id.url_preview)
+        TextView urlDetail;
 
         public ViewPagerAdapter() {
         }
@@ -85,12 +113,13 @@ public class ArticleDetailFragment extends Fragment {
         public Object instantiateItem(ViewGroup container, int position) {
             layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = layoutInflater.inflate(R.layout.article_fullscreen_preview, container, false);
-            ImageView imageViewDetail = view.findViewById(R.id.image_preview);
+            ButterKnife.bind(this, view);
+           /* ImageView imageViewDetail = view.findViewById(R.id.image_preview);
             TextView titleDetail = view.findViewById(R.id.title_preview);
             TextView descriptionDetail = view.findViewById(R.id.description_preview);
             TextView authorDetail = view.findViewById(R.id.author_preview);
             TextView urlDetail = view.findViewById(R.id.url_preview);
-            TextView publishedAtDetail = view.findViewById(R.id.published_at_preview);
+            TextView publishedAtDetail = view.findViewById(R.id.published_at_preview);*/
 
             Article article = articlesList.get(position);
             titleDetail.setText(article.getTitle());

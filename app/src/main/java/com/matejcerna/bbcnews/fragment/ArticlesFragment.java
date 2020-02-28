@@ -36,8 +36,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class ArticlesFragment extends Fragment implements ArticleAdapter.OnItemClickListener {
-    private RecyclerView recyclerView;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    Unbinder unbinder;
+    // private RecyclerView recyclerView;
     private ArticleAdapter articleAdapter;
     private RequestQueue requestQueue;
     List<Article> articlesList;
@@ -47,14 +54,16 @@ public class ArticlesFragment extends Fragment implements ArticleAdapter.OnItemC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_articles, container, false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Factory News");
+        ButterKnife.bind(this, view);
 
-        recyclerView = view.findViewById(R.id.recycler_view);
+        //recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         articlesList = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(getActivity());
         parseJSON();
+        unbinder = ButterKnife.bind(this, view);
         return view;
     }
 
@@ -169,5 +178,11 @@ public class ArticlesFragment extends Fragment implements ArticleAdapter.OnItemC
     @Override
     public void onItemClick(int position) {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
